@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Twitter Mood</title>
+		<link rel="icon" type="image/png" href="Content/Images/globe.png">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&libraries=geometry"></script>
+		
+		<!-- twitter bootstrap -->
+		<link href="Styles/bootstrap.min.css" rel="stylesheet">
+		<script src="js/bootstrap.min.js"></script>
+		
+		<!-- custom javascript file -->
+		<!--<script src="js/myJs.js"></script>-->
+		<!-- custom css file -->
+		<link href="Styles/style.css" rel="stylesheet" />
+		
+	</head>
+	<body class="maps">
+
+		<section class="header">
+			<a href="index.html">
+				<img src="Content/Images/tmm.png" />
+			</a>
+		</section>
+				
+		<div class="btn-group" style="margin-left:12.5%;margin-right:auto;width:50%;">
+		  <button type="button"  style="margin-left:auto;margin-right:auto;width:50%;" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+			Select Region <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu">
+			<li><a id="northeast">Northeast</a></li>
+			<li class="divider"></li>
+			<li><a  id="westCoast">West Coast</a></li>
+			<li class="divider"></li>
+			<li><a id="south">Southern US</a></li>
+			<li class="divider"></li>
+			<li><a id="texas">Texas</a></li>
+			<li class="divider"></li>
+			<li><a  id="centralUS">Central US</a></li>
+			<li class="divider"></li>
+			<li><a id="northwest">Northwest</a></li>
+		  </ul>
+		</div>
+		<br/>
+		
+		<div  style="width:75%;height:auto;margin-left:auto;margin-right:auto;margin-top:1%;border:3px solid;border-color:#95B3D7;background:#363636;color:#FFFFFF;">
+			<p style="margin-left:2%;margin-right:2%; text-align:center; font-size:150%"> 
+				Twitter Mood Monitor is an application designed to help you visualize the mood of cities in the United States. When you select a region, you will be 
+				directed to our map of live moods. The mood is determined by reading recent Tweets. More :) make for a happy city, and more :( means the city is having a bad day.
+				<br/>
+				<img src="Content/Images/MapPage.png" style="margin-left:auto; margin-right:auto;text-align:center;" height=50% width=50%/>
+				<br/>
+				Select a region above to begin! You will be redirected to our map page. 
+			</p>
+		</div>
+		
+		
+		
+		
+		<!--MAP object-->
+		<!--<div id="map-canvas" style="width:75%;height:60%;margin-left:auto;margin-right:auto;border:3px solid;border-color:#95B3D7;">Google Map</div>
+		<br/>
+					
+		<!-- TWITTER BOX object -->
+		
+		
+		<!--City Selector object-->
+		<!--<div align="center"><input id="cityInput" placeholder="Select City..." /></div><br/>-->
+				
+				
+		<Script>
+		
+		// Drop down click events
+			/////////////////////////////////////////////////////////
+			
+			$("#northeast").click(function(e){
+				window.location.href = 'map.html?lat=41.093325&long=-74.882812';
+				e.preventDefault();
+			});
+			
+			$("#westCoast").click(function(e){
+				window.location.href = 'map.html?lat=36.330062&long=-118.959961';
+				e.preventDefault();
+			});
+			
+			$("#south").click(function(e){
+				window.location.href = 'map.html?lat=32.451259&long=-86.330566';
+				e.preventDefault();
+			});
+			
+			$("#texas").click(function(e){
+				window.location.href = 'map.html?lat=36.57749&long=-101.843262';
+				e.preventDefault();
+			});
+			
+			$("#centralUS").click(function(e){
+				window.location.href = 'map.html?lat=43.320182&long=-90.373535';
+				e.preventDefault();
+			});
+			
+			$("#northwest").click(function(e){
+				window.location.href = 'map.html?lat=47.841736&long=-120.585937';
+				e.preventDefault();
+			});
+		
+		</script>
+	</body>
+</html>

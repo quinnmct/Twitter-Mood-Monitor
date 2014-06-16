@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html >
+	<head>
+		<title>Comp 603 Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="./Styles/main.css" />
+		<link rel="stylesheet" type="text/css" href="./Styles/bootstrap.min.css" />
+		<link href="./favicon.ico" rel="icon" type="image/x-icon" />
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script src="./Scripts/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<div id="masthead">
+			<div class="BRBorders">
+				<div class="profImage">
+					<img src="./favicon.ico" class="img-responsive img-thumbnail" style="border: 1px solid;" />
+				</div>
+				<center>
+					<div class="byline" style="bottom:10px;">
+						<span class="pull-left">
+							Technologies<br>
+							Implemented:
+						</span>
+						<span class="pull-right">
+							NodeJS<br>
+							Twitter Bootstrap<br>
+							CSS3/HTML5
+						</span>
+					</div>
+					<div class="byline" style="top:25px; left:20%;">
+						<span class="pull-left">
+							Driven By:
+						</span>
+						<span id="ajaxStatus" class="pull-right" title="Ajax Polling">
+							AJAX
+						</span>
+					</div>
+				</center>
+			</div>
+			<div class="mainCol">
+				<center style="position:relative; top:50px;">
+					<h1 style="font-size: 85px;">Compiler Design</h1>
+					<div class="byline">
+						<span class="pull-left">
+							Class Taught By:
+						</span>
+						<span class="pull-right">
+							Joey Lawrance
+						</span>
+					</div>
+					<br>
+					<div class="byline">
+						<span class="pull-left">
+							Class Powered By:
+						</span>
+						<span class="pull-right">
+							Bamboo<span class="helvetica">&trade;</span>
+						</span>
+					</div>
+				</center>
+			</div>
+			<div class="BLBorders">
+				<div class="profImage">
+					<img src="./Content/Images/LJ.png" alt="Our Professor!" title="Our Professor!" class="img-responsive img-thumbnail" />
+				</div>
+				<center style="font-size:20px;">
+					Hey look! It's the Professor!
+				</center>
+			</div>
+		</div>
+		<div>
+			<div id="navContainer">
+				<ul id="navigation">
+				</ul>
+			</div>
+			<div class="mainPanel">
+				<div style="margin-bottom: 15px; margin-left: 88%;">
+					<button id="toggleAllPanels" class="btn btn-small btn-info" type="button">Toggle All Panels</button>
+				</div>
+				<div id="content">
+				<p>
+					Lorem ipsum dolor sit amet, id vel illud feugait, ad velit utroque nec. No tota legimus principes pro, ne usu phaedrum efficiendi sadipscing, novum omnes populo no est. Cu eripuit electram quo, purto maluisset ea pro, ignota populo perpetua sit ea. Vix no clita similique dissentiunt, at sit nostrum pertinax reformidans, augue ridens no usu. Mea eu nullam deserunt, vix erant contentiones ea. Quodsi perpetua vix ei, no eos timeam apeirian suscipiantur.
+	</p><p>
+	Nam prima semper accusata ad. Impetus nominavi conceptam eam in, has at debet numquam appellantur. Per te justo complectitur, ea qui diceret salutandi necessitatibus. In iudico quidam blandit qui, ut dicat propriae nam. Id omnes possit signiferumque ius, vim utinam fastidii indoctum te. Eos debitis dissentiunt no, cu nisl vocibus verterem duo, ea doming erroribus his.
+	</p><p>
+	Ipsum contentiones id pro, et erant electram per. Putent noluisse an eum. Ex cum rebum philosophia, eam no singulis iudicabit reprimique. Utinam tamquam torquatos et nec, an vide graece deseruisse cum, an cum fuisset invidunt. Iisque conceptam nam an.
+	</p><p>
+	In qui commune perfecto laboramus, per at eius vivendum. Ad constituam scripserit usu, animal aliquid accommodare cu vim. Cu nonumes salutatus eum, simul accumsan te vis. No pro eius veniam. Cu qui solum iisque propriae. Mei ad erat lobortis partiendo. Sed everti vivendo an, mollis disputationi mea ex.
+	</p><p>
+	Stet eloquentiam vim id, malis dicit laoreet per ut, usu nobis saperet conceptam te. Duo cu corpora evertitur, qui malis possit instructior no, natum omnis petentium est an. Qui id aliquip complectitur, et vix mundi semper, nec eros sensibus no. Sea eu atqui honestatis. Minimum omittantur ex nec, eu noster consulatu scribentur sea. Vel ut cibo essent. Stet homero in mei, et malis postulant vix.
+	</p>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="ajaxFailed">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<center>
+					<h2 class="modal-title">Ajax Failure...</h2>
+				</center>
+			  </div>
+			  <div class="modal-body" style="padding-left:15px;">
+					Well, it appears the majaxical engine has failed.<br><br>
+					Go ahead and try to reload the page, usually fixes it.<br>
+					But what do I know, I'm just a dialog box.<br><br>
+					Something is either wrong with the server, or your connection.<br>
+					Or, Aliens.
+			  </div>
+			  <div class="modal-footer">
+				  <center>
+					<button type="button" class="btn btn-info refreshButton" data-dismiss="modal">Refresh</button>
+				  </center>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	</body>
+	<footer>
+		<script>
+			$(function(){
+				var ajaxRequestTypes = {pageLoad:'pageLoadCascade', newPage:'replaceContent'};
+				var ajaxRetry = {current:0, max:1};
+				var ajaxStatus = $('#ajaxStatus');
+				
+				var ajaxFailure = function(type, lessonNumber){
+					ajaxStatus.css('color', 'rgb(202,0,0)');
+					
+					if(ajaxRetry.current >= ajaxRetry.max){
+						$('#ajaxFailed').modal('show');
+					}
+					else {
+						lessonNumber = lessonNumber || "";
+						ajaxStatus.attr("title", "Uh-oh, AJAX problems!.. Attempting a retry")
+						window.setTimeout(function(){eval(type+"("+lessonNumber+")");}, 2000);
+						ajaxRetry.current = ajaxRetry.current+1;
+					}
+					
+					
+				};
+				
+				var ajaxSuccess = function(){
+					ajaxRetry.current = 0;
+					ajaxStatus.css('color', '#333');
+					ajaxStatus.attr('title', 'Ajax Status')
+				};
+				
+				var replaceContent = function(lessonNumber){
+					$(document.body).css('cursor', 'wait');
+					$.ajax('./data/?L'.concat(lessonNumber)).done(function(data){
+						ajaxSuccess();
+						
+						$('#content').html(data);
+						
+						$('.panel-heading').on('click', function(){
+							var panel = $('.'+this.dataset.section);
+							var h2 = $(this).find('.helvetica');
+							if(panel.css('display') == 'none'){
+								panel.removeClass('tabPane');
+								h2.html("&darr;");
+								h2.css('margin-right','16px');
+								this.className  = this.className.replace(' openPanel', '') + ' openPanel';
+							}
+							else {
+								panel.addClass('tabPane');
+								h2.html("&rarr;");
+								h2.css('margin-right','');
+								this.className  = this.className.replace(' openPanel', '');
+							}
+							
+						});
+						var popTransform = $('.popTransform');
+						$.each(popTransform, function(){
+							var data = this.dataset;
+							data.toggle="toggle";
+							if(data.link == ""){
+								data.originalTitle = data.content;
+							}
+							else{
+								data.originalTitle = data.content
+								+ '<br>For more information, <a href="'+data.link+'" target="_blank">Click Here</a>';
+							}
+								
+						});
+						$(popTransform).tooltip({
+							'html' : true,
+							'placement' : 'auto top',
+							'delay' : {'show':300, 'hide':750},
+						});
+						
+					}).fail(function(){
+						ajaxFailure(ajaxRequestTypes.newPage, lessonNumber);
+					});
+					$(document.body).css('cursor', 'initial');
+				};
+				
+				var pageLoadCascade = function(){
+					$.ajax('./lessons').done(function(data){
+						ajaxSuccess();
+						var number;
+						var output = "";
+						
+						$.each(JSON.parse(data), function(index, value){
+							number = value.substring(value.indexOf("L")+1);
+							if(number.toLowerCase() !="images"){
+								output = output + '<li><button data-lesson="'+number+'" class="btn btn-primary ajaxButton">Lesson '+number+'</button></li>';
+							}
+						});
+						
+						$('#navigation').html(output);
+						
+						$('.ajaxButton').on('click', function(){
+							$('#navigation li button').each(function(){
+								this.className = this.className.replace(' ajaxButton','') + " ajaxButton";
+								this.className = this.className.replace(" selectedPage","");
+							});
+							
+							replaceContent(this.dataset.lesson);
+							this.className = this.className.replace(' selectedPage', '') + " selectedPage";
+							this.className = this.className.replace(" ajaxButton","");
+							
+						});
+						
+						$('#navigation li button').each(function(){
+							if(this.dataset.lesson == 1){
+								this.click();
+							}
+						});
+					}).fail(function(){
+						ajaxFailure(ajaxRequestTypes.pageLoad);
+					});
+				};
+				
+				$(window).load(function(){
+					pageLoadCascade();
+				});
+				
+				$('#toggleAllPanels').on('click', function(){
+					var openPanel = $('.openPanel');
+					var panelHeading = $('.panel-heading');
+					if(openPanel.length == 0 || openPanel.length == panelHeading.length){
+						panelHeading.click();
+					}
+					else if(openPanel.length < (panelHeading.length/2)){
+						openPanel.click();
+					}
+					else if(openPanel.length >= (panelHeading.length/2)){
+						openPanel.click();
+						panelHeading.click();
+					}
+				});
+				
+				$('.refreshButton').on('click', function(){
+					window.setTimeout(window.location.reload(), 750);
+				});
+			});
+			
+		</script>
+	</footer>
+</html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Twitter Mood</title>
+		<link rel="icon" type="image/png" href="Content/Images/globe.png">
+		
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&libraries=geometry"></script>
+		
+		<!-- twitter bootstrap -->
+		<link href="Styles/bootstrap.min.css" rel="stylesheet">
+		<script src="js/bootstrap.min.js"></script>
+		
+		<!-- custom javascript file -->
+		<!--<script src="js/myJs.js"></script>-->
+		<!-- custom css file -->
+		<link href="Styles/style.css" rel="stylesheet" />
+		
+		
+	</head>
+	<body class="maps">
+
+		<section class="header">
+			<a href="/index.html">
+				<img src="Content/Images/tmm.png" />
+			</a>
+		</section>
+				
+		<div class="btn-group" style="margin-left:12.5%;margin-right:auto;width:50%;">
+		  <button type="button"  style="margin-left:auto;margin-right:auto;width:50%;height:30px;" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+				Select Region <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu">
+			<li><a id="northeast">Northeast</a></li>
+			<li class="divider"></li>
+			<li><a id="westCoast">West Coast</a></li>
+			<li class="divider"></li>
+			<li><a id="south">Southeast US</a></li>
+			<li class="divider"></li>
+			<li><a id="southWest">Southwest US</a></li>
+			<li class="divider"></li>
+			<li><a id="centralUS">Central US</a></li>
+			<li class="divider"></li>
+			<li><a id="northwest">Northwest</a></li>
+		  </ul>
+		</div>
+	
+		<!--MAP object-->
+		<div id="map-canvas" style="width:75%;height:60%;margin-left:auto;margin-right:auto;margin-top:.5%;border:3px solid;border-color:#95B3D7;">Google Map</div>
+		
+					
+		<!-- TWITTER BOX object -->
+		<div id="twitterBox" class="twitterBox">				
+			<span id='close' style="float:right;display:inline-block;padding:2px 5px;background:#ccc;">x</span>
+					
+			<div class="media">
+				<!--<a href="#" class="pull-left"></a>-->
+				<div class="media-body">
+					<h3 class="media-heading"><div id="twitterName"></div></h3>
+					<img src="Content/Images/redToGreen.png" id="redGreen" style="margin-left:1%;" width=60%/>
+					<input type="range" id="colorRange" min=1 max=10 disabled style="margin-left:1%; width:60%;margin-top:-12%"/>
+					
+				</div>
+			</div>
+			<div class="media" id="tweetHolder">
+				<!--<a href="#" class="pull-left"></a>-->
+				<div class="media-body">
+				</div>
+			</div>
+			
+		</div>
+		
+		<script>
+		
+			//global js variables
+			var map;  //google.maps.Map
+			var cityCircle;
+			
+			//INIT TEMP DATA
+			/////////////////////////////////////////////////////////
+			
+				var citymap = [];
+				
+				
+				citymap[6] = {
+				  name:"Boston",
+				  center: new google.maps.LatLng(42.349156, -71.076050),
+				  population: 3844829, //population used for size of circle
+				  nameAbbr:"boston",
+				  totalParsed: 100,
+				  totalHappy:5,
+				};
+				citymap[14] = {
+				  name:"New York",
+				  center: new google.maps.LatLng(40.675431, -74.047852),
+				  population: 4844829,
+				  nameAbbr:"nyc",
+				  totalParsed:100,
+				  totalHappy:40
+				};
+				citymap[8] = {
+				  name:"Washington D.C.",
+				  center: new google.maps.LatLng(38.890365,-77.036133),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:5,
+				  nameAbbr:"dc"
+				};
+				citymap[15] = {
+				  name:"Atlanta",
+				  center: new google.maps.LatLng(33.739758,-84.396973),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:70,
+				  nameAbbr:'atlanta'
+				};
+				citymap[5] = {
+				  name:"Los Angeles",
+				  center: new google.maps.LatLng(34.013396,-118.212891),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:80,
+				  nameAbbr:'la'
+				};
+				citymap[18] = {
+				  name:"San Francisco",
+				  center: new google.maps.LatLng(37.77872,-122.426147),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:50,
+				  nameAbbr:'sf'
+				};
+				citymap[16] = {
+				  name:"Seattle",
+				  center: new google.maps.LatLng(47.598177,-122.327271),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'seattle'
+				};
+				citymap[0] = {
+				  name:"Orlando",
+				  center: new google.maps.LatLng(28.533258,-81.364746),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'orlando'
+				};
+				citymap[7] = {
+				  name:"New Orleans",
+				  center: new google.maps.LatLng(29.943928,-90.065918),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'no'
+				};
+				citymap[13] = {
+				  name:"Colorado Springs",
+				  center: new google.maps.LatLng(38.819916,-104.831543),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'cs'
+				};
+				citymap[10] = {
+				  name:"Albuquerque",
+				  center: new google.maps.LatLng(35.109518,-106.611328),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'abq'
+				};
+				citymap[11] = {
+				  name:"Dallas",
+				  center: new google.maps.LatLng(32.765914,-96.833496),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'dallas'
+				};
+				citymap[19] = {
+				  name:"San Diego",
+				  center: new google.maps.LatLng(32.714998,-117.15065),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'sd'
+				};
+				citymap[9] = {
+				  name:"Las Vegas",
+				  center: new google.maps.LatLng(36.171971,-115.136719),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'lv'
+				};
+				citymap[4] = {
+				  name:"Portland",
+				  center: new google.maps.LatLng(45.534732,-122.651367),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'portland'
+				};
+				citymap[2] = {
+				  name:"Vancouver",
+				  center: new google.maps.LatLng(49.267244,-123.123779),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'vc'
+				};
+				citymap[17] = {
+				  name:"Buffalo",
+				  center: new google.maps.LatLng(42.921738,-78.859863),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'buf'
+				};
+				citymap[12] = {
+				  name:"Chicago",
+				  center: new google.maps.LatLng(41.868283,-87.659912),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'chi'
+				};
+				citymap[3] = {
+				  name:"Milwaukee",
+				  center: new google.maps.LatLng(43.048193,-87.912598),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'mil'
+				};
+				citymap[1] = {
+				  name:"Minneapolis",
+				  center: new google.maps.LatLng(44.994669,-93.284912),
+				  population: 3944829,
+				  totalParsed: 100,
+				  totalHappy:90,
+				  nameAbbr:'min'
+				};
+			
+			
+			
+			// Drop down click events
+			/////////////////////////////////////////////////////////
+			$("#northeast").click(function(e){
+				map.panTo(new google.maps.LatLng(41.093325, -74.882812));
+				e.preventDefault();
+			});
+			
+			$("#westCoast").click(function(e){
+				map.panTo(new google.maps.LatLng(36.330062, -118.959961));
+				e.preventDefault();
+			});
+			
+			$("#south").click(function(e){
+				map.panTo(new google.maps.LatLng(32.451259,-86.330566));
+				e.preventDefault();
+			});
+			
+			$("#southWest").click(function(e){
+				map.panTo(new google.maps.LatLng(36.57749,-101.843262));
+				e.preventDefault();
+			});
+			
+			$("#centralUS").click(function(e){
+				map.panTo(new google.maps.LatLng(43.320182,-90.373535));
+				e.preventDefault();
+			});
+			
+			$("#northwest").click(function(e){
+				map.panTo(new google.maps.LatLng(47.841736,-120.585937));
+				e.preventDefault();
+			});
+			
+			
+			
+			
+			
+			//code runs on page init
+			function initialize() {
+			
+				//save all tweet data to json files
+				$.ajax({url:"/tweetData/",
+					success:function(result){
+						//console.log(result);
+					}
+				});
+			
+				//create json file from DB
+				$.ajax({url:"/data/",
+					success:function(result){
+						
+						//parse json file
+						$.ajax({
+							url:'/readFile/',
+							dataType:'text',
+							type:'get',
+							success:function(data) {
+								try{
+									console.log("FILE DATA: "+data);
+									var myCityData = JSON.parse(data);
+									//var myCityData = JSON.parse('[{"location":"boston","total_parsed":1231,"num_happy":256,"num_unhappy":975},{"location":"NYC","total_parsed":1231,"num_happy":256,"num_unhappy":975}]');
+									console.log("PARSED DATA: "+myCityData);
+									
+									//console.log(myCityData[0].location);
+									//console.log(myCityData[1].location);
+									
+									var index = 0;
+									$.each(myCityData, function(){
+										console.log("JSONPARSE: "+this.location);
+										citymap[index].totalParsed = this.total_parsed;
+										citymap[index].totalHappy = this.num_happy;
+										citymap[index].totalUnhappy = this.num_unhappy;
+										//console.log("Adding to citymap: "+this.total_parsed);
+										index=index+1;
+									});
+								
+								//init map options
+								var mapOptions = {
+									zoom: 6,
+									center: new google.maps.LatLng(urlLatLong[0], urlLatLong[1]),
+									mapTypeId: google.maps.MapTypeId.TERRAIN,
+									zoomControl: false,
+									scrollwheel:false,
+									draggable: true, 
+									disableDoubleClickZoom: true,
+									disableDefaultUI: true
+								}
+								
+								
+								//create map with map div & map options
+								map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+								
+								
+								
+								
+									for (var city in citymap) {
+										console.log("MAP: "+citymap[city].name);
+										//determine mood color
+										if(citymap[city] == 'undefined'){ 
+											//prevents divide by zero
+											citymap[city] = 100; 
+										};
+										var percentHappy = parseFloat(citymap[city].totalHappy / 
+																	  citymap[city].totalParsed);
+																	  
+										
+										
+										//SET COLOR DATA
+										if(percentHappy <= .1){
+											citymap[city].color = '#E60000';
+										}else if(percentHappy <= .2){
+											citymap[city].color = '#FF3300';
+										}else if(percentHappy <= .3){
+											citymap[city].color = '#FF6000';
+										}else if(percentHappy <= .4){
+											citymap[city].color = '#FF8500';
+										}else if(percentHappy <= .5){
+											citymap[city].color = '#FFaa11';
+										}else if(percentHappy <= .6){
+											citymap[city].color = '#FFFF11';
+										}else if(percentHappy <= .7){
+											citymap[city].color = '#DEFF00';
+										}else if(percentHappy <= .8){
+											citymap[city].color = '#AAFF00';
+										}else if(percentHappy <= .9){
+											citymap[city].color = '#66FF00';
+										}else{
+											citymap[city].color = '#00FF00';
+										};
+										
+									
+										//circleOptions
+										var populationOptions = {
+										  strokeColor: citymap[city].color,
+										  strokeOpacity: 0.8,
+										  strokeWeight: 2,
+										  fillColor: citymap[city].color,
+										  fillOpacity: 0.25,
+										  map: map,
+										  center: citymap[city].center,
+										  radius: citymap[city].population / 100,
+										  clickable : true
+										};
+										
+										// Add the circle for this city to the map.
+										cityCircle = new google.maps.Circle(populationOptions);
+										
+										//atts click event to each circle
+										google.maps.event.addListener(cityCircle, 'click', function(ev){
+										
+											$('#twitterBox').css({"visibility":"visible"});
+											
+											
+											/* DETERMINE CLOSEST CITY */
+											var closestDistance = 100000000;
+											var closestCity;
+											for(var city2 in citymap){
+												var tempDistance = google.maps.geometry.spherical.computeDistanceBetween(
+																   citymap[city2].center,ev.latLng);
+												
+												if(tempDistance < closestDistance){
+													closestDistance = tempDistance;
+													closestCity = city2;
+													//console.log(citymap[closestCity].name);
+												}
+											};
+												
+											/* USE closest city to populate the screen */
+												
+												//set city name
+											$('#twitterName').text(citymap[closestCity].name + ' -  '+citymap[closestCity].totalHappy + ' / '+ citymap[closestCity].totalParsed + ' happy tweets'); 
+											
+											//checking for the 10 colors to set the slider range
+											
+											if(citymap[closestCity].color.localeCompare('#00FF00')==0){
+													$("input[type=range]").val(1);
+											}else if(citymap[closestCity].color.localeCompare('#66FF00')==0){
+													$("input[type=range]").val(2);
+											}else if(citymap[closestCity].color.localeCompare('#AAFF00')==0){
+													$("input[type=range]").val(3);
+											}else if(citymap[closestCity].color.localeCompare('#DEFF00')==0){
+													$("input[type=range]").val(4);
+											}else if(citymap[closestCity].color.localeCompare('#FFFF11')==0){
+													$("input[type=range]").val(5);
+											}else if(citymap[closestCity].color.localeCompare('#FFaa11')==0){
+													$("input[type=range]").val(6);
+											}else if(citymap[closestCity].color.localeCompare('#FF8500')==0){
+													$("input[type=range]").val(7);
+											}else if(citymap[closestCity].color.localeCompare('#FF6000')==0){
+													$("input[type=range]").val(8);
+											}else if(citymap[closestCity].color.localeCompare('#FF3300')==0){
+													$("input[type=range]").val(9);
+											}else if(citymap[closestCity].color.localeCompare('#E60000')==0){
+													$("input[type=range]").val(10);
+											}
+											
+											//tweets will be stored in a citytweets variable sharing the same index as their associated city
+											//$('#tweet1Name').text(citytweets[closestCity].user);
+											//$('#tweet1Text').text(citytweets[closestCity].tweet);
+											
+											
+											//READ TWEETS from saved json file
+											$.ajax({
+												url:'/readTweet/?'+citymap[closestCity].nameAbbr,
+												dataType:'text',
+												type:'get',
+												success:function(data){
+													//console.log("FILE DATA: "+data);
+													
+													var myTweetData = JSON.parse(data);
+													$('#tweetHolder').html('');
+													$.each(myTweetData, function(){
+														$( "#tweetHolder" ).append( '<div class="media-body"><h4 class="media-heading" '+
+																					'id="tweet1Name">'+this.location+'</h4><p id="tweet1Text">'+this.text+'</p></div>' );
+													});
+												}
+											});
+											
+										});
+									}
+								
+								
+								}catch(e){
+									console.log("Parse error: "+e);
+								}
+							}
+						});
+						
+					}
+				});
+				
+				var urlLatLong = {};
+				var params = location.search.substr(1);
+				var urlData = params.split("&");
+					for(var i=0; i<urlData.length; i++) {
+					var item = urlData[i].split("=");
+					urlLatLong[i] = item[1];
+				}
+				
+				//in case no params are passed
+				/*
+				if(urlLatLong[0] == 'undefined'){
+					urlLatLong[0] = 41.093325;
+				}
+				if(urlLatLong[1] == 'undefined'){
+					urlLatLong[1] = -74.882812;
+				}*/
+				
+				
+					
+					//Close Popup twitter box
+					document.getElementById('close').onclick = function(){
+						$('#twitterBox').css({"visibility":"hidden"});
+						return false;
+					};
+				}
+			
+			//add listener to init the map object
+			google.maps.event.addDomListener(window, 'load', initialize);
+			
+		</script>
+	</body>
+</html>
